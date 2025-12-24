@@ -1,0 +1,22 @@
+# public_html/.htaccess
+RewriteEngine On
+
+# Serve storage files directly
+RewriteRule ^storage/ - [L]
+
+# Everything else → /public (Laravel)
+RewriteRule ^(.*)$ public/$1 [L]
+RewriteEngine On
+
+# 1) Serve existing files (css/js/img) directly from root or /public
+RewriteCond %{REQUEST_URI} ^/public/ [OR]
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# 2) Special-case: allow /storage/* to be served as-is (if you mirror/copy storage)
+RewriteRule ^storage/ - [L]
+
+# 3) Everything else → /public
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]
